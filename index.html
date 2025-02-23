@@ -28,8 +28,13 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
                 <li v-for="size in sizes">{{size}}</li>
             </ul>
 
-            <div v-for="variant in variants" :key="variant.variantId">
-                <p>{{ variant.variantColor }}</p>
+            <div
+                    class="color-box"
+                    v-for="variant in variants"
+                    :key="variant.variantId"
+                    :style="{ backgroundColor:variant.variantColor }"
+                    @mouseover="updateProduct(variant.variantImage)"
+            >
             </div>
 
             <p v-if="inventory > 10">In Stock</p>
@@ -38,6 +43,13 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
             <span v-show="onSale">On Sale</span>
         </div>
+
+        <div class="cart">
+            <p>Cart({{ cart }})</p>
+        </div>
+
+        <button v-on:click="addToCart">Add to cart</button>
+        <button v-on:click="removeFromCart">Remove from cart</button>
 
         <a :href="link">More products like this</a>
     </div>
