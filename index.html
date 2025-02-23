@@ -17,8 +17,9 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <div class="product-image">
             <img alt="#" v-bind:src="image" :alt="altText"/>
         </div>
+
         <div class="product-info">
-            <h1>{{ product }}</h1>
+            <h1>{{ title }}</h1>
 
             <ul>
                 <li v-for="detail in details">{{ detail }}</li>
@@ -30,16 +31,16 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
             <div
                     class="color-box"
-                    v-for="variant in variants"
+                    v-for="(variant, index) in variants"
                     :key="variant.variantId"
                     :style="{ backgroundColor:variant.variantColor }"
-                    @mouseover="updateProduct(variant.variantImage)"
+                    @mouseover="updateProduct(index)"
             >
             </div>
 
             <p v-if="inventory > 10">In Stock</p>
             <p v-else-if="inventory <=10 && inventory > 0">Almost sold out!</p>
-            <p v-else>Out of stock</p>
+            <p v-else :class="{ outOfStock: !inStock}">Out of stock</p>
 
             <span v-show="onSale">On Sale</span>
         </div>
@@ -48,7 +49,7 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
             <p>Cart({{ cart }})</p>
         </div>
 
-        <button v-on:click="addToCart">Add to cart</button>
+        <button v-on:click="addToCart" :disabled="!inStock" :class="{disabledButton: !inStock}">Add to cart</button>
         <button v-on:click="removeFromCart">Remove from cart</button>
 
         <a :href="link">More products like this</a>
