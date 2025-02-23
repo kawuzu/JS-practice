@@ -7,7 +7,7 @@ let app = new Vue({
         altText: "A pair of socks",
         link: 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks.',
         inventory: 11,
-        onSale:true,
+        onSale:false,
         details:['80% cotton', '20% polyester', 'Gender-neutral'],
         sizes:['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
         variants: [
@@ -55,8 +55,26 @@ let app = new Vue({
 
         inStock(){
             return this.variants[this.selectedVariant].variantQuantity
+        },
+
+        sale() {
+            if (this.onSale) {
+                return this.brand + ' ' + this.product + ' are on sale!'
+            }
+            return  this.brand + ' ' + this.product + ' are not on sale'
         }
-
     }
+})
 
+Vue.component('product', {
+    template: `
+    <div class="product">
+    <div class="product-image">
+            <img alt="#" v-bind:src="image" :alt="altText"/>
+</div>`,
+    data(){
+        return{}
+    },
+    methods: {},
+    computed: {}
 })

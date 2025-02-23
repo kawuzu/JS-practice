@@ -42,7 +42,7 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
             <p v-else-if="inventory <=10 && inventory > 0">Almost sold out!</p>
             <p v-else :class="{ outOfStock: !inStock}">Out of stock</p>
 
-            <span v-show="onSale">On Sale</span>
+            <span> {{sale}}</span>
         </div>
 
         <div class="cart">
