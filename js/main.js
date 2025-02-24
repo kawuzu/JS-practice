@@ -6,9 +6,7 @@ Vue.component('product', {
 
         <div class="product-info">
             <h1>{{ title }}</h1>
-
-            <p>{{ description }}</p>
-            
+    
             <product-details></product-details>
 
             <ul>
@@ -33,9 +31,9 @@ Vue.component('product', {
             <span> {{sale}}</span>
         </div>
 
-        <div class="cart">
-            <p>Cart({{ cart }})</p>
-        </div>
+<!--        <div class="cart">-->
+<!--            <p>Cart({{ cart }})</p>-->
+<!--        </div>-->
 
         <button v-on:click="addToCart" :disabled="!inStock" :class="{disabledButton: !inStock}">Add to cart</button>
         <button v-on:click="removeFromCart">Remove from cart</button>
@@ -72,7 +70,8 @@ Vue.component('product', {
     },
     methods: {
         addToCart() {
-            this.cart += 1
+            this.$emit('add-to-cart',
+                this.variants[this.selectedVariant].variantId);
         },
 
         updateProduct(index) {
@@ -81,8 +80,9 @@ Vue.component('product', {
         },
 
         removeFromCart() {
-            this.cart -= 1;
-        }
+            this.$emit('delete-to-cart',
+                this.variants[this.selectedVariant].variantId);
+        },
     },
     props:{
         premium: {
@@ -136,7 +136,20 @@ Vue.component('product-details', {
 
 let app = new Vue({
     el: '#app',
-    data:{
-        premium:true,
+    data: {
+        premium: true,
+        cart: []
+    },
+    methods: {
+        updateCart(id) {
+            this.cart.push(id);
+        },
+
+        deleteCart() {
+            if (this.cart.length <= 0) {
+                return this.cart.length;
+            } else
+                this.cart.splice(this.cart.length -1,1);
+        }
     }
 })
