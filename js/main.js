@@ -7,13 +7,15 @@ Vue.component('product', {
         <div class="product-info">
             <h1>{{ title }}</h1>
 
-            <ul>
-                <li v-for="detail in details">{{ detail }}</li>
-            </ul>
+            <p>{{ description }}</p>
+            
+            <product-details></product-details>
 
             <ul>
                 <li v-for="size in sizes">{{size}}</li>
             </ul>
+            
+            <p>Shipping: {{ shipping }}</p>
 
             <div
                     class="color-box"
@@ -49,7 +51,7 @@ Vue.component('product', {
             link: 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks.',
             inventory: 11,
             onSale:false,
-            details:['80% cotton', '20% polyester', 'Gender-neutral'],
+
             sizes:['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
             variants: [
                 {
@@ -82,6 +84,12 @@ Vue.component('product', {
             this.cart -= 1;
         }
     },
+    props:{
+        premium: {
+            type: Boolean,
+            required: true,
+        }
+    },
     computed: {
         title() {
             return this.brand + ' ' + this.product;
@@ -100,10 +108,35 @@ Vue.component('product', {
                 return this.brand + ' ' + this.product + ' are on sale!'
             }
             return  this.brand + ' ' + this.product + ' are not on sale'
-        }
+        },
+
+        shipping(){
+            if (this.premium) {
+                return "Free";
+            } else{
+                return 2.99;
+            }
+        },
+
+    }
+}),
+
+Vue.component('product-details', {
+    template:`
+    <ul>
+       <li v-for="detail in details">{{ detail }}</li>
+    </ul>
+    `,
+    data() {
+        return{
+            details:['80% cotton', '20% polyester', 'Gender-neutral']
+        };
     }
 })
 
 let app = new Vue({
     el: '#app',
+    data:{
+        premium:true,
+    }
 })
