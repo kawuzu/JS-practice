@@ -210,6 +210,17 @@ Vue.component('product', {
                 this.variants[this.selectedVariant].variantId);
         },
 
+        saveReviews() {
+            localStorage.setItem('reviews', JSON.stringify(this.reviews));
+        },
+
+        loadReviews() {
+            let reviews = localStorage.getItem('reviews');
+            if (reviews) {
+                this.reviews = JSON.parse(reviews);
+            }
+        }
+
     },
     props:{
         premium: {
@@ -247,8 +258,11 @@ Vue.component('product', {
 
     },
     mounted() {
+        this.loadReviews();
         eventBus.$on('review-submitted', productReview => {
-            this.reviews.push(productReview)})
+            this.reviews.push(productReview);
+            this.saveReviews();
+        });
     }
 }),
 
