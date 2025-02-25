@@ -1,6 +1,5 @@
 let eventBus = new Vue();
 
-
 Vue.component('product-tabs', {
     props: {
         reviews:{
@@ -23,7 +22,7 @@ Vue.component('product-tabs', {
         </ul>
         <div v-show="selectedTab === 'Reviews'">
             <p v-if="!reviews.length">There are no reviews yet.</p>
-                <ul>
+                <ul class="review-block">
                     <li v-for="review in reviews">
                         <p>{{ review.name }}</p>
                         <p>Rating: {{ review.rating }}</p>
@@ -51,8 +50,7 @@ Vue.component('product-tabs', {
     }
 })
 
-
-            Vue.component('product-review', {
+Vue.component('product-review', {
     template:`
     <form class="review-form" @submit.prevent="onSubmit">
         <p v-if="errors.length">
@@ -80,10 +78,12 @@ Vue.component('product-tabs', {
             </select>
         </p>
         <label for="recommend" >Would you recommend this product?</label><br>
+        <div class="option-radio">
              <input type="radio" id="yes" name="recommend" value="yes">
              <label for="yes" >Yes</label><br>
              <input type="radio" id="no" name="recommend" value="no">
              <label for="no" >No</label><br>
+        </div>
         <p>
         <input type="submit" value="Submit">
         </p>
@@ -129,39 +129,41 @@ Vue.component('product', {
 
         <div class="product-info">
             <h1>{{ title }}</h1>
-    
-            <product-details></product-details>
 
-            <ul>
+            <ul class="sizes">
                 <li v-for="size in sizes">{{size}}</li>
             </ul>
-            
-            <p>Shipping: {{ shipping }}</p>
-
+           <div class="prod-info">
+           <div class="color-box-all">
+            <p>Color:</p>
+            <div class="color-boxes">
             <div
                     class="color-box"
                     v-for="(variant, index) in variants"
                     :key="variant.variantId"
                     :style="{ backgroundColor:variant.variantColor }"
-                    @mouseover="updateProduct(index)"
-            >
+                    @mouseover="updateProduct(index)">
             </div>
-
-            <p v-if="inventory > 10">In Stock</p>
-            <p v-else-if="inventory <=10 && inventory > 0">Almost sold out!</p>
-            <p v-else :class="{ outOfStock: !inStock}">Out of stock</p>
-
-            <span> {{sale}}</span>
-        </div>
-
-        <button v-on:click="addToCart" :disabled="!inStock" :class="{disabledButton: !inStock}">Add to cart</button>
-        <button v-on:click="removeFromCart">Remove from cart</button>
-        
-        <a :href="link">More products like this</a>
-        
-        <div>
-                <product-tabs :reviews="reviews"></product-tabs>
+            </div>
+            </div>
             
+            <div class="stock-block">
+                <p v-if="inventory > 10">In Stock</p>
+                <p v-else-if="inventory <=10 && inventory > 0">Almost sold out!</p>
+                <p v-else :class="{ outOfStock: !inStock}">Out of stock</p>
+            </div>
+            
+            <span> {{sale}}</span></div>
+            <a :href="link">More products like this</a>
+            
+        <div class="cart-buttons">
+            <button v-on:click="addToCart" :disabled="!inStock" :class="{disabledButton: !inStock}">Add to cart</button>
+            <button v-on:click="removeFromCart">Remove from cart</button>
+        </div>
+        </div>
+  
+        <div class="reviews-form">
+        <product-tabs :reviews="reviews"></product-tabs>     
     </div>
 </div>`,
     data(){
