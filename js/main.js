@@ -2,7 +2,7 @@ let eventBus = new Vue();
 
 Vue.component('product-tabs', {
     props: {
-        reviews:{
+        reviews: {
             type: Array,
             required: false
         },
@@ -21,31 +21,53 @@ Vue.component('product-tabs', {
             <span class="tab" :class="{ activeTab: selectedTab === tab }" v-for="(tab, index) in tabs" @click="selectedTab = tab">{{ tab }}</span>
         </ul>
         <div v-show="selectedTab === 'Reviews'">
-            <p v-if="!reviews.length">There are no reviews yet.</p>
-                <ul class="review-block">
-                    <li v-for="review in reviews">
-                        <p>{{ review.name }}</p>
-                        <p>Rating: {{ review.rating }}</p>
-                        <p>{{ review.review }}</p>
-                    </li>
-                </ul>
+            <p v-if="!filteredReviews.length">There are no reviews yet.</p>
+            <div>
+                <label for="ratingFilter">Filter by rating:</label>
+                <select id="ratingFilter" v-model="ratingFilter">
+                    <option value="0">All</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+                </select>
+            </div>
+            <ul class="review-block">
+                <li v-for="review in filteredReviews">
+                    <p>{{ review.name }}</p>
+                    <p>Rating: {{ review.rating }}</p>
+                    <p>{{ review.review }}</p>
+                </li>
+            </ul>
         </div>
         <div v-show="selectedTab === 'Make a Review'">
             <product-review></product-review>
         </div>
         <div v-show="selectedTab === 'Shipping'">
-             <p>Shipping: {{ shipping }} Free</p>
+            <p>Shipping: {{ shipping }} Free</p>
         </div>
         <div v-show="selectedTab === 'Details'">
-                    <ul>
+            <ul>
                 <product-details></product-details>
             </ul>
-      </div>
+        </div>
     </div>
-`,
+    `,
     data() {
-        return {tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
-            selectedTab: 'Reviews'
+        return {
+            tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
+            selectedTab: 'Reviews',
+            ratingFilter: 0
+        }
+    },
+    computed: {
+        filteredReviews() {
+            if (this.ratingFilter == 0) {
+                return this.reviews;
+            } else {
+                return this.reviews.filter(review => review.rating == this.ratingFilter);
+            }
         }
     }
 })
